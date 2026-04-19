@@ -16,8 +16,8 @@ const postSchema = new Schema({
     images: {
         type: [String],
         validate: {
-            validator: (arr) => arr.length <= 20,
-            message: "You can't upload more then 20 pictures"
+            validator: (arr) => arr.length <= 5,
+            message: "You can't upload more then 5 pictures"
         },
         required: true,
     },

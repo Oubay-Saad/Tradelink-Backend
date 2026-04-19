@@ -1,6 +1,9 @@
 const express = require("express")
+const sharp = require("sharp")
 const Post = require("../models/Post")
 const { auth, isTradesman } = require("../middleware/auth")
+const upload = require("../config/upload")
+
 
 const router = express.Router()
 
@@ -58,6 +61,36 @@ router.delete("/posts/:id", auth, isTradesman, async(req, res) => {
 
     } catch (err) {
         res.status(500).json({ error: "Server error" })
+    }
+})
+
+router.patch("/:id/image", upload.single("image"), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ error: "No image provided" })
+
+        const { userId } = req.body
+
+        const compressedBuffer = await sharp(req.file.buffer)
+            .resize(720, 720, {
+                fit: "cover",
+                position: "center"
+            })
+            .jpeg({ quality: 70 })
+            .toBuffer()
+
+        const base64 = `data:image/jpeg;base64,${compressedBuffer.toString("base64")}`
+
+        const post = await Post.findByIdAndUpdate(
+            req.params.id,
+            { $push: { images: base64 } },
+            { returnDocument: "after" }
+        )
+
+        if (!post) return res.status(404).json({ error: "Post not found" })
+
+        res.status(201).json(post)
+    } catch (err) {
+        res.status(500).json({ error: err.message })
     }
 })
 
