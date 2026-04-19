@@ -48,7 +48,7 @@ router.patch("/requests/:requestId/status", auth, isCustomer, async(req, res) =>
         const { status } = req.body
 
         const request = await Request.findByIdAndUpdate(
-            req.params.id,
+            req.params.requestId,
             { status },
             { new: true }
         )
