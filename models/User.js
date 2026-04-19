@@ -1,4 +1,7 @@
 const mongoose = require("mongoose")
+const JOB_TYPES = require("../config/jobTypes")
+const JOB_TYPE_VALUES = JOB_TYPES.map(j => j.value)
+
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
@@ -55,6 +58,11 @@ const userSchema = new Schema({
     },
 
     tradesmanInfo: {
+        jobTypes: {
+            type: [String],
+            enum: JOB_TYPE_VALUES,
+            default: []
+        },
         skills: {
             type: [String], 
             default: []

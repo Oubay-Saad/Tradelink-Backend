@@ -10,6 +10,39 @@ const upload = require("../config/upload")
 const router = express.Router()
 
 
+// ─── SEARCH & FILTER TRADESMEN ────────────────────────────────────────────────
+// GET /api/users/search?name=john&location=Annaba&jobType=plumber&experience=3
+router.get("/users/search", auth, async (req, res) => {
+    try {
+        const { name, location, jobType, experience } = req.query
+
+        const filter = {}
+
+        if (name) {
+            filter.name = { $regex: name, $options: "i" }  // case insensitive
+        }
+
+        if (location) {
+            filter.location = { $regex: location, $options: "i" }
+        }
+
+        if (jobType) {
+            filter["tradesmanInfo.jobTypes"] = jobType
+        }
+
+        if (experience) {
+            filter["tradesmanInfo.experience"] = { $gte: parseInt(experience) }
+        }
+
+        const users = await User.find(filter).select("-password -tradesmanInfo.gallery")
+
+        res.status(200).json({ results: users })
+
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
+})
+
 router.get("/users/:id", auth, async (req, res) => {
     try {
         const user = await User.findById(req.params.id).select("-password")

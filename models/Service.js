@@ -1,4 +1,7 @@
 const mongoose = require("mongoose")
+const JOB_TYPES = require("../config/jobTypes")
+const JOB_TYPE_VALUES = JOB_TYPES.map(j => j.value)
+
 const Schema = mongoose.Schema
 
 
@@ -7,6 +10,11 @@ const serviceSchema = new Schema({
         type: String,
         required: true,
         maxlength: 100,
+    },
+    jobTypes: {
+        type: [String],
+        enum: JOB_TYPE_VALUES,
+        required: true,
     },
     description: {
         type: String,

@@ -9,6 +9,7 @@ const requestRoutes = require("./routes/requestRoutes")
 const postRoutes = require("./routes/postRoutes")
 const reviewRoutes = require("./routes/reviewRoutes")
 
+
 const app = express()
 const PORT = process.env.PORT
 
@@ -22,6 +23,11 @@ mongoose.connect(process.env.MONGODB_URI)
     console.log("Failed to connect to data base: ", err)
 })
 
+// GET /api/job-types  — no auth needed, public
+app.get("/job-types", (req, res) => {
+    const JOB_TYPES = require("../config/jobTypes")
+    res.status(200).json({ jobTypes: JOB_TYPES })
+})
 
 
 app.use(authRoutes)
