@@ -35,66 +35,40 @@ router.get("/users/:id", auth, async (req, res) => {
     }
 })
 
-router.get("/users/:id/posts", auth, async(req,res) => {
-    try{
-        const posts = await Post.find({postedBy: req.params.id})
-        res.status(200).json({Gallery: posts})
 
-    }catch(err){
-        res.status(500).json({error: "Server error"})
-    }
-})
-
-router.patch("/users/me", auth, async(req,res) => {
-    try{
-        const {bio, location, skills, experience} = req.body
-        const updatedData = {bio, location}
-
-        if(req.user.role === "tradesman"){
-            updatedData.tradesmanInfo = {skills, experience}
-        }
-        
-        const updated = await User.findByIdAndUpdate(req.user.id, updatedData, {new: true}).select("-password")
-        
-        res.status(200).json({message: "updated successfuly!", user: updated})
-
-    }catch(err){
-        res.status(500).json({error: "Server error"})
-    }
-})
-
-router.patch("/:id/profile-pic", upload.single("profilePic"), async (req, res) => {
+router.patch("/users/me", auth, upload.single("profilePic"), async (req, res) => {
     try {
-        if (!req.file) return res.status(400).json({ error: "No image provided" })
+        const { bio, location, skills, experience } = req.body
+        const updatedData = { bio, location }
 
-        // Compress + resize image
-        const compressedBuffer = await sharp(req.file.buffer)
-            .resize(300, 300) // resize (good for profile pics)
-            .jpeg({ quality: 60 }) // compress (0–100)
-            .toBuffer();
+        // Handle profile pic if provided
+        if (req.file) {
+            const compressedBuffer = await sharp(req.file.buffer)
+                .resize(300, 300)
+                .jpeg({ quality: 60 })
+                .toBuffer()
+            updatedData.profilePic = `data:image/jpeg;base64,${compressedBuffer.toString("base64")}`
+        }
 
-        console.log("Original size:", req.file.buffer.length / 1024, "KB")
-        console.log("Compressed size:", compressedBuffer.length / 1024, "KB")
+        // Handle tradesman-specific fields
+        if (req.user.role === "tradesman") {
+            updatedData.tradesmanInfo = { skills, experience }
+        }
 
-        // Convert buffer to Base64 string with its mime type prefix
-        // This prefix tells the frontend how to render it directly
-        const base64 = `data:image/jpeg;base64,${compressedBuffer.toString("base64")}`
+        const updated = await User.findByIdAndUpdate(
+            req.user.id,
+            updatedData,
+            { returnDocument: "after" }
+        ).select("-password")
 
-        console.log("Base64 length:", base64.length, "characters")
+        res.status(200).json({ message: "Updated successfully!", user: updated })
 
-        const user = await User.findByIdAndUpdate(
-            req.params.id,
-            { profilePic: base64 },
-            { new: true }
-        )
-
-        if (!user) return res.status(404).json({ error: "User not found" })
-
-        res.json({ profilePic: user.profilePic })
     } catch (err) {
         res.status(500).json({ error: err.message })
     }
 })
+
+
 
 
 module.exports = router

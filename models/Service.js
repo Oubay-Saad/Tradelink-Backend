@@ -17,6 +17,14 @@ const serviceSchema = new Schema({
         type: Number,
         required: true,
     },
+    images: {
+        type: [String],
+        default: [],
+        validate: {
+            validator: (arr) => arr.length <= 3,
+            message: "You can't upload more than 3 images"
+        }
+    },
     createdBy: {
         type: Schema.Types.ObjectId,
         ref: "User",
