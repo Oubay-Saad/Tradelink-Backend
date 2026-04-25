@@ -10,6 +10,7 @@ const serviceRoutes = require("./routes/serviceRoutes")
 const requestRoutes = require("./routes/requestRoutes")
 const postRoutes = require("./routes/postRoutes")
 const reviewRoutes = require("./routes/reviewRoutes")
+const adminRoutes = require("./routes/adminRoutes")
 
 
 const app = express()
@@ -38,6 +39,7 @@ app.use(serviceRoutes)
 app.use(requestRoutes)
 app.use(postRoutes)
 app.use(reviewRoutes)
+app.use(adminRoutes)
 
 
 app.listen(PORT, () => console.log(`The server is runing on port ${PORT}`))
