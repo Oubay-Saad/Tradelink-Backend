@@ -15,30 +15,28 @@ router.use(auth)
 router.use(isAdmin)
 
 
-// ─────────────────────────────────────────────
-// 👤 USERS
-// ─────────────────────────────────────────────
+// Users
 
-// GET ALL USERS (KEEP YOUR ORIGINAL)
+// Get all users
 router.get("/admin/users", async (req, res) => {
     const users = await User.find().select("-password")
     res.json(users)
 })
 
-// GET ONE USER
+// Get one user
 router.get("/admin/users/:id", async (req, res) => {
     const user = await User.findById(req.params.id).select("-password")
     if (!user) return res.status(404).json({ error: "User not found" })
     res.json(user)
 })
 
-// ➕ CREATE USER (NEW)
+// Create user
 router.post("/admin/users", async (req, res) => {
     const user = await User.create(req.body)
     res.json(user)
 })
 
-// ✏️ UPDATE USER (NEW)
+// Update user
 router.patch("/admin/users/:id", async (req, res) => {
     const user = await User.findByIdAndUpdate(
         req.params.id,
@@ -51,37 +49,35 @@ router.patch("/admin/users/:id", async (req, res) => {
     res.json(user)
 })
 
-// ❌ DELETE USER
+// Delete user
 router.delete("/admin/users/:id", async (req, res) => {
     await User.findByIdAndDelete(req.params.id)
     res.json({ message: "User deleted" })
 })
 
 
-// ─────────────────────────────────────────────
-// 📝 POSTS
-// ─────────────────────────────────────────────
+// Posts
 
-// GET ALL POSTS (KEEP)
+// Get all posts
 router.get("/admin/posts", async (req, res) => {
     const posts = await Post.find().populate("postedBy", "name email")
     res.json(posts)
 })
 
-// GET ONE POST
+// Get one post
 router.get("/admin/posts/:id", async (req, res) => {
     const post = await Post.findById(req.params.id)
     if (!post) return res.status(404).json({ error: "Post not found" })
     res.json(post)
 })
 
-// ➕ CREATE POST
+// Create post
 router.post("/admin/posts", async (req, res) => {
     const post = await Post.create(req.body)
     res.json(post)
 })
 
-// ✏️ UPDATE POST
+// Update post
 router.patch("/admin/posts/:id", async (req, res) => {
     const post = await Post.findByIdAndUpdate(
         req.params.id,
@@ -94,37 +90,35 @@ router.patch("/admin/posts/:id", async (req, res) => {
     res.json(post)
 })
 
-// ❌ DELETE POST
+// Delete post
 router.delete("/admin/posts/:id", async (req, res) => {
     await Post.findByIdAndDelete(req.params.id)
     res.json({ message: "Post deleted" })
 })
 
 
-// ─────────────────────────────────────────────
-// 🛠️ SERVICES
-// ─────────────────────────────────────────────
+// Services
 
-// GET ALL SERVICES (KEEP)
+// Get all services
 router.get("/admin/services", async (req, res) => {
     const services = await Service.find().populate("createdBy", "name email")
     res.json(services)
 })
 
-// GET ONE SERVICE
+// Get one service
 router.get("/admin/services/:id", async (req, res) => {
     const service = await Service.findById(req.params.id)
     if (!service) return res.status(404).json({ error: "Service not found" })
     res.json(service)
 })
 
-// ➕ CREATE SERVICE
+// Create service
 router.post("/admin/services", async (req, res) => {
     const service = await Service.create(req.body)
     res.json(service)
 })
 
-// ✏️ UPDATE SERVICE
+// Update service
 router.patch("/admin/services/:id", async (req, res) => {
     const service = await Service.findByIdAndUpdate(
         req.params.id,
@@ -137,18 +131,16 @@ router.patch("/admin/services/:id", async (req, res) => {
     res.json(service)
 })
 
-// ❌ DELETE SERVICE
+// Delete service
 router.delete("/admin/services/:id", async (req, res) => {
     await Service.findByIdAndDelete(req.params.id)
     res.json({ message: "Service deleted" })
 })
 
 
-// ─────────────────────────────────────────────
-// 📩 REQUESTS
-// ─────────────────────────────────────────────
+// Requests
 
-// GET ALL REQUESTS (KEEP)
+// Get all requests
 router.get("/admin/requests", async (req, res) => {
     const requests = await Request.find()
         .populate("service")
@@ -157,7 +149,7 @@ router.get("/admin/requests", async (req, res) => {
     res.json(requests)
 })
 
-// UPDATE STATUS
+// Update status
 router.patch("/admin/requests/:id/status", async (req, res) => {
     const { status } = req.body
 
@@ -172,18 +164,16 @@ router.patch("/admin/requests/:id/status", async (req, res) => {
     res.json(request)
 })
 
-// DELETE
+// Delete request
 router.delete("/admin/requests/:id", async (req, res) => {
     await Request.findByIdAndDelete(req.params.id)
     res.json({ message: "Request deleted" })
 })
 
 
-// ─────────────────────────────────────────────
-// ⭐ REVIEWS
-// ─────────────────────────────────────────────
+// Reviews
 
-// GET ALL REVIEWS (KEEP)
+// Get all reviews
 router.get("/admin/reviews", async (req, res) => {
     const reviews = await Review.find()
         .populate("tradesman", "name")
@@ -192,16 +182,14 @@ router.get("/admin/reviews", async (req, res) => {
     res.json(reviews)
 })
 
-// DELETE REVIEW
+// Delete review
 router.delete("/admin/reviews/:id", async (req, res) => {
     await Review.findByIdAndDelete(req.params.id)
     res.json({ message: "Review deleted" })
 })
 
 
-// ─────────────────────────────────────────────
-// 🔥 GLOBAL OVERRIDE (POWER TOOL)
-// ─────────────────────────────────────────────
+// Global override
 
 router.delete("/admin/:model/:id", async (req, res) => {
     const { model, id } = req.params

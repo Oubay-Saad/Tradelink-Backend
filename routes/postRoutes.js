@@ -1,6 +1,7 @@
 const express = require("express")
 const sharp = require("sharp")
 const Post = require("../models/Post")
+const User = require("../models/User")
 const { auth, isTradesman } = require("../middleware/auth")
 const upload = require("../config/upload")
 

@@ -26,12 +26,19 @@ mongoose.connect(process.env.MONGODB_URI)
     console.log("Failed to connect to data base: ", err)
 })
 
-// GET /api/job-types  — no auth needed, public
+// Get job types, no auth needed, public
 app.get("/job-types", (req, res) => {
     const JOB_TYPES = require("../config/jobTypes")
     res.status(200).json({ jobTypes: JOB_TYPES })
 })
 
+// Admin only for testing
+
+const path = require('path');
+
+app.get('/admin-panel', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
 
 app.use(authRoutes)
 app.use(userRoutes)

@@ -10,8 +10,7 @@ const upload = require("../config/upload")
 const router = express.Router()
 
 
-// ─── SEARCH & FILTER TRADESMEN ────────────────────────────────────────────────
-// GET /api/users/search?name=john&location=Annaba&jobType=plumber&experience=3
+// Search and filter tradesmen
 router.get("/users/search", auth, async (req, res) => {
     try {
         const { name, location, jobType, experience } = req.query
@@ -72,7 +71,9 @@ router.get("/users/:id", auth, async (req, res) => {
 router.patch("/users/me", auth, upload.single("profilePic"), async (req, res) => {
     try {
         const { bio, location, skills, experience } = req.body
-        const updatedData = { bio, location }
+        const updatedData = {}
+        if (bio !== undefined) updatedData.bio = bio
+        if (location !== undefined) updatedData.location = location
 
         // Handle profile pic if provided
         if (req.file) {
@@ -85,7 +86,8 @@ router.patch("/users/me", auth, upload.single("profilePic"), async (req, res) =>
 
         // Handle tradesman-specific fields
         if (req.user.role === "tradesman") {
-            updatedData.tradesmanInfo = { skills, experience }
+            if (skills !== undefined) updatedData["tradesmanInfo.skills"] = skills
+            if (experience !== undefined) updatedData["tradesmanInfo.experience"] = experience
         }
 
         const updated = await User.findByIdAndUpdate(

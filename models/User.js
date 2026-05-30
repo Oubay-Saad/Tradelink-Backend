@@ -39,7 +39,7 @@ const userSchema = new Schema({
         required: true,
     },
 
-    // other informations
+    // Other information
 
     profilePic: {
         type: String,

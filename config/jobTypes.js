@@ -1,5 +1,5 @@
 const JOB_TYPES = [
-    // Construction & Structure
+    // Construction and structure
     { value: "plumber",                   en: "Plumber",                      fr: "Plombier",                         ar: "سبّاك" },
     { value: "electrician",               en: "Electrician",                  fr: "Électricien",                      ar: "كهربائي" },
     { value: "carpenter",                 en: "Carpenter",                    fr: "Charpentier",                      ar: "نجار" },
@@ -15,7 +15,7 @@ const JOB_TYPES = [
     { value: "glazier",                   en: "Glazier",                      fr: "Vitrier",                          ar: "زجّاج" },
     { value: "ironworker",                en: "Ironworker",                   fr: "Ferrailleur",                      ar: "حدّاد" },
 
-    // Home Systems
+    // Home systems
     { value: "hvac_technician",           en: "HVAC Technician",              fr: "Technicien CVC",                   ar: "تقني تكييف وتدفئة" },
     { value: "gas_installer",             en: "Gas Installer",                fr: "Installateur de gaz",              ar: "فنّي غاز" },
     { value: "solar_panel_installer",     en: "Solar Panel Installer",        fr: "Installateur de panneaux solaires",ar: "مركّب ألواح شمسية" },
@@ -23,7 +23,7 @@ const JOB_TYPES = [
     { value: "generator_technician",      en: "Generator Technician",         fr: "Technicien en générateurs",        ar: "تقني مولدات كهرباء" },
     { value: "satellite_installer",       en: "Satellite & Antenna Installer",fr: "Installateur satellite & antenne", ar: "مركّب أطباق وهوائيات" },
 
-    // Finishing & Interior
+    // Finishing and interior
     { value: "interior_designer",         en: "Interior Designer",            fr: "Designer d'intérieur",             ar: "مصمم داخلي" },
     { value: "decorator",                 en: "Decorator",                    fr: "Décorateur",                       ar: "مزيّن / ديكور" },
     { value: "cabinet_maker",             en: "Cabinet Maker",                fr: "Ébéniste",                         ar: "صانع خزائن" },
@@ -32,7 +32,7 @@ const JOB_TYPES = [
     { value: "false_ceiling_installer",   en: "False Ceiling Installer",      fr: "Poseur de faux plafonds",          ar: "مركّب أسقف مستعارة" },
     { value: "kitchen_fitter",            en: "Kitchen Fitter",               fr: "Installateur de cuisines",         ar: "مركّب مطابخ" },
 
-    // Maintenance & Repair
+    // Maintenance and repair
     { value: "handyman",                  en: "Handyman",                     fr: "Homme à tout faire",               ar: "عامل صيانة عامة" },
     { value: "appliance_repair",          en: "Appliance Repair Technician",  fr: "Technicien en électroménager",     ar: "تقني إصلاح أجهزة" },
     { value: "lock_door_specialist",      en: "Lock & Door Specialist",       fr: "Spécialiste serrures et portes",   ar: "متخصص أقفال وأبواب" },
@@ -40,7 +40,7 @@ const JOB_TYPES = [
     { value: "pest_control",              en: "Pest Control",                 fr: "Dératisation / Désinsectisation",  ar: "مكافحة الحشرات والقوارض" },
     { value: "cleaning_service",          en: "Cleaning Service",             fr: "Service de nettoyage",             ar: "خدمة تنظيف" },
 
-    // Outdoor & Heavy
+    // Outdoor and heavy
     { value: "landscaper",               en: "Landscaper",                   fr: "Paysagiste",                       ar: "مزيّن حدائق" },
     { value: "well_digger",              en: "Well Digger",                  fr: "Puisatier",                        ar: "حفّار آبار" },
     { value: "demolition_worker",        en: "Demolition Worker",            fr: "Démolisseur",                      ar: "عامل هدم" },

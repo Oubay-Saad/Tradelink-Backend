@@ -14,7 +14,7 @@ const toBase64 = async (buffer) => {
     return `data:image/jpeg;base64,${compressed.toString("base64")}`
 }
 
-// ─── CREATE SERVICE ───────────────────────────────────────────────────────────
+// Create service
 router.post("/services", auth, isCustomer, upload.array("images", 3), async (req, res) => {
     try {
         const { title, description, budget } = req.body
@@ -39,8 +39,7 @@ router.post("/services", auth, isCustomer, upload.array("images", 3), async (req
     }
 })
 
-// ─── GET ALL SERVICES (with optional filter) ──────────────────────────────────
-// GET /api/services?jobType=plumber&minBudget=1000&maxBudget=5000
+// Get all services
 router.get("/services", auth, async (req, res) => {
     try {
         const { jobType, minBudget, maxBudget } = req.query
@@ -48,7 +47,7 @@ router.get("/services", auth, async (req, res) => {
         const filter = {}
 
         if (jobType) {
-            filter.jobType = jobType
+            filter.jobTypes = jobType
         }
 
         if (minBudget || maxBudget) {
@@ -59,7 +58,6 @@ router.get("/services", auth, async (req, res) => {
 
         const services = await Service.find(filter)
             .populate("createdBy", "name")
-            .select("-images")
 
         res.status(200).json({ services })
 
@@ -68,7 +66,7 @@ router.get("/services", auth, async (req, res) => {
     }
 })
 
-// ─── GET SINGLE SERVICE ───────────────────────────────────────────────────────
+// Get single service
 router.get("/services/:id", auth, async (req, res) => {
     try {
         const service = await Service.findById(req.params.id).populate("createdBy", "name")
@@ -83,7 +81,7 @@ router.get("/services/:id", auth, async (req, res) => {
 
 
 
-// ─── EDIT SERVICE ─────────────────────────────────────────────────────────────
+// Edit service
 router.patch("/services/:id", auth, isCustomer, upload.array("images", 3), async (req, res) => {
     try {
         const service = await Service.findById(req.params.id)
@@ -115,7 +113,7 @@ router.patch("/services/:id", auth, isCustomer, upload.array("images", 3), async
     }
 })
 
-// ─── DELETE SERVICE ───────────────────────────────────────────────────────────
+// Delete service
 router.delete("/services/:id", auth, isCustomer, async (req, res) => {
     try {
         const service = await Service.findById(req.params.id)
