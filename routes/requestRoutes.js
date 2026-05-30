@@ -77,4 +77,47 @@ router.get("/requests/me", auth, async (req, res) => {
     }
 })
 
+// Edit a request
+router.patch("/requests/:requestId", auth, async (req, res) => {
+    try {
+        const { estimatedPrice, message } = req.body
+        const updateData = {}
+        if (estimatedPrice !== undefined) updateData.estimatedPrice = estimatedPrice
+        if (message !== undefined) updateData.message = message
+
+        const request = await Request.findByIdAndUpdate(
+            req.params.requestId,
+            updateData,
+            { new: true }
+        )
+
+        if (!request) {
+            return res.status(404).json({ error: "Request not found" })
+        }
+
+        res.status(200).json({ message: "Request updated!", request })
+    } catch (err) {
+        res.status(500).json({ error: "Server error" })
+    }
+})
+
+// Delete/withdraw a request
+router.delete("/requests/:requestId", auth, async (req, res) => {
+    try {
+        const request = await Request.findById(req.params.requestId)
+        if (!request) {
+            return res.status(404).json({ error: "Request not found" })
+        }
+
+        if (request.requestedBy.toString() !== req.user.id) {
+            return res.status(403).json({ error: "Not authorized" })
+        }
+
+        await Request.findByIdAndDelete(req.params.requestId)
+        res.status(200).json({ message: "Request deleted!" })
+    } catch (err) {
+        res.status(500).json({ error: "Server error" })
+    }
+})
+
 module.exports = router

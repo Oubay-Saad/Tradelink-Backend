@@ -61,6 +61,28 @@ router.get("/posts/:id", auth, async(req, res) => {
     }
 })
 
+// Get all posts
+router.get("/posts", auth, async(req, res) => {
+    try {
+        const { name } = req.query
+        let filter = {}
+
+        if (name) {
+            const users = await User.find({ name: { $regex: name, $options: "i" } }).select('_id')
+            const userIds = users.map(u => u._id)
+            filter.postedBy = { $in: userIds }
+        }
+
+        const posts = await Post.find(filter)
+            .populate("postedBy", "name profilePic")
+            .sort({ createdAt: -1 })
+
+        res.status(200).json({ posts })
+    } catch (err) {
+        res.status(500).json({ error: "Server error" })
+    }
+})
+
 router.delete("/posts/:id", auth, isTradesman, async(req, res) => {
     try {
         const post = await Post.findById(req.params.id)
